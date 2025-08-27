@@ -1,0 +1,32 @@
+name: Node CI
+
+on:
+  push:
+    branches: [ chore-profile-upgrade ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install
+        run: npm ci
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Lint (if exists)
+        run: |
+          if (Test-Path package.json) {
+             = Get-Content package.json -Raw | ConvertFrom-Json
+            if (.scripts.lint) { npm run lint } else { echo "no lint script" }
+          }
+        shell: pwsh
+      - name: Build
+        run: npm run build
