@@ -15,8 +15,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: npm
       - name: Install
         run: npm ci
       - name: Type check
@@ -24,8 +24,8 @@ jobs:
       - name: Lint (if exists)
         run: |
           if (Test-Path package.json) {
-             = Get-Content package.json -Raw | ConvertFrom-Json
-            if (.scripts.lint) { npm run lint } else { echo "no lint script" }
+            $pkg = Get-Content package.json -Raw | ConvertFrom-Json
+            if ($pkg.scripts.lint) { npm run lint } else { echo "no lint script" }
           }
         shell: pwsh
       - name: Build
